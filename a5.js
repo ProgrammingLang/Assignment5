@@ -18,7 +18,7 @@ var searchList = function(ns, target) {
     else {
       return cps_searchList(fp.tl(ns), target, function(x){
         return k(fp.cons(fp.hd(ns), x));
-      })
+      });
     }
   };
 
@@ -33,7 +33,12 @@ var searchList = function(ns, target) {
 // end comment below
 
 var b2d = function (b) {
-  return 0;
+    if(fp.isNull(fp.tl(b))) {
+		return fp.hd(b);
+	}
+	else {
+		return fp.add(fp.hd(b), fp.mul(2, b2d(fp.tl(b))));
+	}
 };
 
 
@@ -44,9 +49,22 @@ var b2d = function (b) {
 // end comment below
 
 var b2d_cps = function (b) {
-    return 0;
-};
+    var helper = function(b, k) {
+		if(fp.isNull(fp.tl(b))) {
+			return k(fp.hd(b));
+		}
+		else if(!fp.isMember(1, fp.tl(b))) {
+			return "Leading Zeros are not allowed.";
+		}
+		else {
+			return helper(fp.tl(b), function (x) {
+				return k(fp.add(fp.hd(b), fp.mul(2, x)));
+			});
+		}
+	};
 
+	return helper(b,function(x) { return x; });
+};
 
 // ////////// End of code for problem 3 ////////////////////
 //
